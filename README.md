@@ -1,1 +1,1 @@
-# tic-tac-toe-odin
+# Tic Tac Toe project. The Odin Project Lesson

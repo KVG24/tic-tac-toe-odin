@@ -1,62 +1,61 @@
 const gameBoard = (() => {
     let board;
-    
-    const cellContainer = document.querySelector('.game-container');
-    const restartBtn = document.getElementById('restart-button');
-    
+
+    const cellContainer = document.querySelector(".game-container");
+    const restartBtn = document.getElementById("restart-button");
+
     function populateBoard() {
         for (let i = 0; i < 9; i++) {
-            const div = document.createElement('div');
-            div.classList.add('cell');
+            const div = document.createElement("div");
+            div.classList.add("cell");
             cellContainer.appendChild(div);
             board = [];
-            board.push('');
+            board.push("");
         }
     }
 
     populateBoard();
 
-    const cells = document.querySelectorAll('.game-container div');
+    const cells = document.querySelectorAll(".game-container div");
 
     cells.forEach((cell, index) => {
-        cell.addEventListener('click', () => {
+        cell.addEventListener("click", () => {
             cell.classList.add(game.activePlayer.mark);
             board[index] = game.activePlayer.mark;
-            cell.style.pointerEvents = 'none';
+            cell.style.pointerEvents = "none";
             game.freeCells -= 1;
             game.checkWinner();
             if (game.foundWinner == false) {
                 if (game.freeCells > 0) {
-                    game.switchPlayer()
+                    game.switchPlayer();
                 }
                 if (game.freeCells == 0) {
                     game.resultText.textContent = `It's a tie!`;
-                    restartBtn.style.display = 'block';
+                    restartBtn.style.display = "block";
                 }
             }
-        })
-    })
+        });
+    });
 
-    restartBtn.addEventListener('click', restart);
+    restartBtn.addEventListener("click", restart);
 
     function restart() {
-        location.reload()
+        location.reload();
     }
 
     return {
         board,
         cellContainer,
         populateBoard,
-        restartBtn
-    }
-
+        restartBtn,
+    };
 })();
 
 const game = (() => {
-    
-    const playerOne = { name: 'Player 1', mark: 'x' };
-    const playerTwo = { name: 'Player 2', mark: 'o' };
-    const resultText = document.getElementById('result-text');
+    const playerOne = { name: "Player 1", mark: "x" };
+    const playerTwo = { name: "Player 2", mark: "o" };
+    const resultText = document.getElementById("result-text");
+    const finishCover = document.querySelector(".finish-game-cover");
 
     let activePlayer = playerOne;
     let foundWinner = false;
@@ -70,27 +69,30 @@ const game = (() => {
         [1, 4, 7],
         [2, 5, 8],
         [0, 4, 8],
-        [2, 4, 6]
+        [2, 4, 6],
     ];
 
     function checkWinner() {
         winCombinations.forEach((item, index) => {
-            if (gameBoard.board[item[0]] == this.activePlayer.mark && 
+            if (
+                gameBoard.board[item[0]] == this.activePlayer.mark &&
                 gameBoard.board[item[1]] == this.activePlayer.mark &&
-                gameBoard.board[item[2]] == this.activePlayer.mark) {
-                    foundWinner = true;
-                    gameBoard.restartBtn.style.display = 'block';
-                    resultText.textContent = `${this.activePlayer.name} wins!`;
-                }
-        })    
+                gameBoard.board[item[2]] == this.activePlayer.mark
+            ) {
+                foundWinner = true;
+                gameBoard.restartBtn.style.display = "block";
+                resultText.textContent = `${this.activePlayer.name} wins!`;
+                finishCover.style.display = "block";
+            }
+        });
     }
 
     function switchPlayer() {
-        if (this.activePlayer === playerOne) { 
-            this.activePlayer = playerTwo
-         } else { 
-            this.activePlayer = playerOne
-         }
+        if (this.activePlayer === playerOne) {
+            this.activePlayer = playerTwo;
+        } else {
+            this.activePlayer = playerOne;
+        }
     }
 
     return {
@@ -100,7 +102,6 @@ const game = (() => {
         checkWinner,
         foundWinner,
         switchPlayer,
-        playerOne
-    }
-
+        playerOne,
+    };
 })();
